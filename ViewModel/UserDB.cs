@@ -7,7 +7,7 @@ using Model;
 
 namespace ViewModel
 {
-    internal class UserDB : BaseDB
+    public class UserDB : BaseDB
     {
         protected override BaseEntity NewEntity()
         {
@@ -28,13 +28,13 @@ namespace ViewModel
         }
         public UserList SelectAll()
         {
-            command.CommandText = "SELECT * FROM tbUser";
+            command.CommandText = "SELECT * FROM tblUser";
             UserList list = new UserList(ExecuteCommand());
             return list;
         }
         public User SelectById(int id)
         {
-            command.CommandText = "SELECT * FROM tbUser WHERE id=" + id;
+            command.CommandText = "SELECT * FROM tblUser WHERE id=" + id;
             UserList list = new UserList(ExecuteCommand());
             if (list.Count == 0)
                 return null;
@@ -43,11 +43,19 @@ namespace ViewModel
 
         }
 
+        public User SelectByEmail(string email)
+        {
+            command.CommandText = $"SELECT * FROM tblUser WHERE Email='{email}'";
+            UserList list = new UserList(ExecuteCommand());
+            if (list.Count == 0)
+                return null;
+            return list[0];
+        }
+
         protected override void LoadParameters(BaseEntity entity)
         {
             User user = entity as User;
             command.Parameters.Clear();
-            command.Parameters.AddWithValue("@id", user.ID);
             command.Parameters.AddWithValue("@firstName", user.Firstname);
             command.Parameters.AddWithValue("@lastName", user.Lastname);
             command.Parameters.AddWithValue("@email", user.Email);
@@ -55,17 +63,18 @@ namespace ViewModel
             command.Parameters.AddWithValue("@gender", user.Gender);
             command.Parameters.AddWithValue("@isManager", user.IsManager);
             command.Parameters.AddWithValue("@birthday", user.BirthDay);
+            command.Parameters.AddWithValue("@id", user.ID);
         }
 
         public int InsertUser(User user)
         {
-            command.CommandText = "INSERT INTO TblUser (firstName,lastName,email,password,gender,isManager,birthDay) VALUES (@firstName,@lastName,@email,@password,@gender,@isManager,@birthDay)";
+            command.CommandText = "INSERT INTO TblUser (firstName,lastName,email,[password],gender,isManager,birthDay) VALUES (@firstName,@lastName,@email,@password,@gender,@isManager,@birthDay)";
             LoadParameters(user);
             return ExecuteCRUD();
         }
         public int UpdateUser(User user)
         {
-            command.CommandText = "UPDATE TblUser SET firstName = @firstName,lastName = @lastName,email = @email,gender = @gender,isManager = @isManager,birthDay = @birthDay WHERE ID = @ID";
+            command.CommandText = "UPDATE TblUser SET firstName = @firstName,lastName = @lastName,email = @email,[password]=@password,gender = @gender,isManager = @isManager,birthDay = @birthDay WHERE ID = @ID";
             LoadParameters(user);
             return ExecuteCRUD();
         }
@@ -74,6 +83,15 @@ namespace ViewModel
             command.CommandText = "DELETE FROM TblUser WHERE ID =@ID";
             LoadParameters(user);
             return ExecuteCRUD();
+        }
+        public User Login(User user)
+        {
+            command.CommandText = $"SELECT * FROM TblUser WHERE (Email = '{user.Email}') " +
+                $"AND ([Password] = '{user.Password}')";
+            UserList list = new UserList(base.ExecuteCommand());
+            if (list.Count == 1)
+                return list[0];
+            return null;
         }
     }
 }
