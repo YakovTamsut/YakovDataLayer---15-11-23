@@ -11,15 +11,15 @@ namespace Model
     public class Workout : BaseEntity
     {
         protected string type;
-        protected int difficulty;
-        protected ExerciseList exercises;
+        protected string duration;
+        protected ExerciseInWorkOutList exInWorkout;
 
-
+        [DataMember]
         public string Type { get { return type; } set { type = value; } }
         [DataMember]
-        public int Difficulty { get { return difficulty; } set { difficulty=value; } }
+        public string Duration { get { return duration; } set { duration = value; } }
         [DataMember]
-        public ExerciseList Exercises { get { return exercises; } set { exercises =value; } }
+        public ExerciseInWorkOutList ExInWorkout { get { return exInWorkout; } set { exInWorkout = value; } }
     }
 
     [CollectionDataContract]

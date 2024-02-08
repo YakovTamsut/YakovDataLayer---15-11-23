@@ -78,6 +78,7 @@ namespace ViewModel
             try
             {
                 connection.Open(); //פתיחת תקשורת עם המסד
+                string statement = command.CommandText;
                 records = command.ExecuteNonQuery(); //ביצוע השאילתה                
             }
             catch (Exception ex)

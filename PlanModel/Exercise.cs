@@ -14,22 +14,22 @@ namespace Model
         protected string exerciseName;
         protected int difficulty;
         protected bool isCompound;
-        protected int repRange;
         protected string targetMuscle;
         protected string type;
+        protected string exerciseUrl;
 
         [DataMember]
         public string ExerciseName { get { return exerciseName; } set { exerciseName = value; } }
         [DataMember]
-        public int Difficulty { get { return difficulty; } set { value = difficulty; } }
+        public int Difficulty { get { return difficulty; } set { difficulty = value; } }
         [DataMember]
         public bool IsCompound { get { return isCompound; } set { isCompound = value; } }
-        [DataMember]
-        public int RepRange { get { return repRange; } set { repRange = value; } }
         [DataMember]
         public string TargetMuscle { get { return targetMuscle; } set { targetMuscle = value; } }
         [DataMember]
         public string Type { get { return type; } set { type = value; } }
+        [DataMember]
+        public string ExerciseUrl { get { return exerciseUrl; } set { exerciseUrl = value; } }
 
     }
 

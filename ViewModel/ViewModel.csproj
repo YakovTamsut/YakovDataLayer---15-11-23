@@ -46,9 +46,11 @@
     <Compile Include="ExerciseInWorkOutDB.cs" />
     <Compile Include="UserDB.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WorkPlanDB.cs" />
     <Compile Include="WorkoutDB.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AddExercisesXML.xml" />
     <Content Include="YakovDB.accdb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

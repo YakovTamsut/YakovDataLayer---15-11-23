@@ -13,9 +13,11 @@ namespace ViewModel
         {
             ExerciseInWorkOut exinworkout = entity as ExerciseInWorkOut;
             exinworkout.ID=int.Parse(reader["id"].ToString());
-            exinworkout.RepRange = reader["repRange"].ToString();
+            exinworkout.Reps = int.Parse(reader["reps"].ToString());
+            exinworkout.Sets = int.Parse(reader["sets"].ToString());
             WorkoutDB workoutDB = new WorkoutDB();
             exinworkout.Workout = workoutDB.SelectById(int.Parse(reader["workoutID"].ToString()));
+
             ExerciseDB exerciseDB = new ExerciseDB();
             exinworkout.Exercise = exerciseDB.SelectById(int.Parse(reader["exercisesID"].ToString()));
             return exinworkout;
@@ -25,10 +27,11 @@ namespace ViewModel
         {
             ExerciseInWorkOut exinworkout = entity as ExerciseInWorkOut;
             command.Parameters.Clear();
-            command.Parameters.AddWithValue("@id", exinworkout.ID);
-            command.Parameters.AddWithValue("@repRange", exinworkout.RepRange);
             command.Parameters.AddWithValue("@workoutID", exinworkout.Workout.ID);
             command.Parameters.AddWithValue("@exercisesID", exinworkout.Exercise.ID);
+            command.Parameters.AddWithValue("@reps", exinworkout.Reps);
+            command.Parameters.AddWithValue("@sets", exinworkout.Sets);
+            command.Parameters.AddWithValue("@id", exinworkout.ID);
         }
 
         protected override BaseEntity NewEntity()
@@ -50,23 +53,30 @@ namespace ViewModel
                 return null;
             return list[0];
         }
-        public int InsertWorkout(Workout workout)
+        public int InsertWorkout(ExerciseInWorkOut workout)
         {
-            command.CommandText = "INSERT INTO tblExInWorkout (repRange,workoutID,exercisesID) VALUES (@repRange,@workoutID,@exercisesID)";
+            command.CommandText = "INSERT INTO tblExInWorkout (workoutID,exercisesID,reps,sets) VALUES (@workoutID,@exercisesID,@reps,@sets)";
             LoadParameters(workout);
             return ExecuteCRUD();
         }
-        public int UpdateWorkout(Workout workout)
+        public int UpdateWorkout(ExerciseInWorkOut workout)
         {
-            command.CommandText = "UPDATE tblExInWorkout SET repRange = @repRange,workoutID = @workoutID,exercisesID = @exercisesID WHERE ID = @ID";
+            command.CommandText = "UPDATE tblExInWorkout SET workoutID = @workoutID,exercisesID = @exercisesID,reps = @reps,sets = @sets WHERE ID = @ID";
             LoadParameters(workout);
             return ExecuteCRUD();
         }
-        public int DeleteWorkout(Workout workout)
+        public int DeleteWorkout(ExerciseInWorkOut workout)
         {
             command.CommandText = "DELETE FROM tblExInWorkout WHERE ID = @ID";
             LoadParameters(workout);
             return ExecuteCRUD();
+        }
+
+        public ExerciseInWorkOutList SelectByWorkout(Workout workout)
+        {
+            command.CommandText = $"SELECT * FROM tblExInWorkout WHERE workoutID={workout.ID}";
+            ExerciseInWorkOutList list = new ExerciseInWorkOutList(ExecuteCommand());
+            return list;
         }
     }
 }

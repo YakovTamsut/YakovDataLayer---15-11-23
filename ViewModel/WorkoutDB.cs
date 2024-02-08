@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,18 +19,18 @@ namespace ViewModel
             Workout workout = entity as Workout;
             workout.ID = int.Parse(reader["id"].ToString());
             workout.Type = reader["type"].ToString();
-            workout.Difficulty = int.Parse(reader["difficulty"].ToString());
+            workout.Duration = reader["duration"].ToString();
             return workout;
         }
         public WorkoutList SelectAll()
         {
-            command.CommandText = "SELECT * FROM tblWorkout";
+            command.CommandText = "SELECT * FROM tblWorkouts";
             WorkoutList list = new WorkoutList(ExecuteCommand());
             return list;
         }
         public Workout SelectById(int id)
         {
-            command.CommandText = "SELECT * FROM tblWorkout WHERE id=" + id;
+            command.CommandText = "SELECT * FROM tblWorkouts WHERE id=" + id;
             WorkoutList list = new WorkoutList(ExecuteCommand());
             if (list.Count == 0)
                 return null;
@@ -39,25 +40,25 @@ namespace ViewModel
         {
             Workout workout = entity as Workout;
             command.Parameters.Clear();
+            command.Parameters.AddWithValue("@type", workout.Type);
+            command.Parameters.AddWithValue("@duration", workout.Duration);
             command.Parameters.AddWithValue("@id", workout.ID);
-            command.Parameters.AddWithValue("@firstName", workout.Type);
-            command.Parameters.AddWithValue("@lastName", workout.Difficulty);
         }
         public int InsertWorkout(Workout workout)
         {
-            command.CommandText = "INSERT INTO TblWorkouts (type,difficulty) VALUES (@type,@difficulty)";
+            command.CommandText = "INSERT INTO tblWorkouts (type,duration) VALUES (@type,@duration)";
             LoadParameters(workout);
             return ExecuteCRUD();
         }
         public int UpdateWorkout(Workout workout)
         {
-            command.CommandText = "UPDATE TblWorkouts SET type = @type,difficulty = @difficulty WHERE ID = @ID";
+            command.CommandText = "UPDATE tblWorkouts SET type = @type,duration = @duration WHERE ID = @ID";
             LoadParameters(workout);
             return ExecuteCRUD();
         }
         public int DeleteWorkout(Workout workout)
         {
-            command.CommandText = "DELETE FROM TblWorkouts WHERE ID = @ID";
+            command.CommandText = "DELETE FROM tblWorkouts WHERE ID = @ID";
             LoadParameters(workout);
             return ExecuteCRUD();
         }

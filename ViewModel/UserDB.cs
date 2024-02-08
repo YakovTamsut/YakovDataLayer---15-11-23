@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using Model;
@@ -39,8 +40,6 @@ namespace ViewModel
             if (list.Count == 0)
                 return null;
             return list[0];
-
-
         }
 
         public User SelectByEmail(string email)
@@ -93,5 +92,7 @@ namespace ViewModel
                 return list[0];
             return null;
         }
+
+        
     }
 }

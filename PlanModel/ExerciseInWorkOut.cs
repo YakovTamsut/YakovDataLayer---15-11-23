@@ -12,13 +12,17 @@ namespace Model
     {
         protected Exercise exercise;
         protected Workout workout;
-        protected string repRange;
+        protected int reps;
+        protected int sets;
 
+        [DataMember]
         public Exercise Exercise { get { return exercise; } set { exercise = value; } }
         [DataMember]
         public Workout Workout { get { return workout; } set { workout = value; } }
         [DataMember]
-        public string RepRange { get { return repRange; } set { repRange = value; } }
+        public int Reps { get { return reps; } set { reps = value; } }
+        [DataMember]
+        public int Sets { get { return sets; } set { sets = value; } }
     }
 
     [CollectionDataContract]
